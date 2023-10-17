@@ -23,8 +23,8 @@
     Guest -u-> GuestDowload
 
     User -u->  UserRegistration
-    User -r->  UserLogin
-    User -l->  DataInteraction
+    User -l->  UserLogin
+    User -r->  DataInteraction
 
     Administrator -d-> DataManagement
     Administrator -d-> UserInteraction
