@@ -26,8 +26,8 @@
     User -l->  UserLogin
     User -r->  DataInteraction
 
-    Administrator -d-> DataManagement
-    Administrator -d-> UserInteraction
+    Administrator -r-> DataManagement
+    Administrator -l-> UserInteraction
 
 @enduml
 
