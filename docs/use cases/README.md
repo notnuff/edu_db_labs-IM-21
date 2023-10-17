@@ -9,7 +9,7 @@
     actor "Адміністратор" as Administrator
 
     usecase "<b>GuestSearch</b>\nПошук даних" as GuestSearch
-    usecase "<b>GuestDowload</b>\Завантаження даних" as GuestDowload
+    usecase "<b>GuestDowload</b>\nЗавантаження даних на комп'ютер" as GuestDowload
     usecase "<b>UserRegistration</b>\nРеєстрація у системі" as UserRegistration
     usecase "<b>UserLogin</b>\nВхід у систему" as UserLogin
     usecase "<b>DataInteraction</b>\nВзаємодія з даними" as DataInteraction
@@ -22,7 +22,7 @@
     Guest -u-> GuestSearch
     Guest -u-> GuestDowload
 
-    User -r->  UserRegistration
+    User -u->  UserRegistration
     User -r->  UserLogin
     User -l->  DataInteraction
 
@@ -38,7 +38,7 @@
     actor "Гість" as Guest
 
     usecase "<b>GuestSearch</b>\nПошук даних" as GuestSearch
-    usecase "<b>GuestDowload</b>\Завантаження даних на комп'ютер" as GuestDowload
+    usecase "<b>GuestDowload</b>\nЗавантаження даних на комп'ютер" as GuestDowload
 
     Guest -u-> GuestSearch
     Guest -u-> GuestDowload
@@ -90,7 +90,7 @@
     Administrator -l-> DataManagement
     Administrator -u-> AdminLogin
     Administrator -u-> AdminLogout
-    Administrator -r-> DataInteraction
+    Administrator -r-> UserInteraction
 
     DataManagement <.u. DataDelete:extends
     DataManagement <.d. DataUpload:extends
