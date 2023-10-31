@@ -9,17 +9,17 @@
 
 @startuml
 
-entity User <> #cdccd9 entity User.id <> entity User.login <> entity User.password <> entity User.mail <> entity User.name <> entity User.role <>
+entity User entity User.id #FFFFFF entity User.login #FFFFFF entity User.password #FFFFFF entity User.mail #FFFFFF entity User.name #FFFFFF entity User.role #FFFFFF
 
 User "1.1" -- "0.*" Access
 User.id -d-* User.login -d-* User.password -d-* User.mail -d-* User.name -d-* User
 
-entity Guest <> #cdccd9 entity Guest.id <>
+entity Guest entity Guest.id #FFFFFF
 
 Guest "1.1" -- "0.*" Access
 Guest.id -d-* Guest
 
-entity Role <> #cdccd9 entity Role.name <> entity Role.id <> entity Role.permissionRate <>
+entity Role entity Role.name #FFFFFF entity Role.id #FFFFFF entity Role.permissionRate #FFFFFF
 
 Role "1.1" -d-* "0.*" User
 Role.name -d-* Role.id -d-* Role.permissionRate -d-* Role
@@ -28,17 +28,17 @@ entity Access <> #cdccd9
 
 Access "0.*" -- "0.*" Post
 
-entity Post <> #cdccd9 entity Post.id <> entity Post.name <> entity Post.title <> entity Post.description <> entity Post.uploadedAt <> entity Post.updatedAt <>
+entity Post entity Post.id #FFFFFF entity Post.name #FFFFFF entity Post.title #FFFFFF entity Post.description #FFFFFF entity Post.uploadedAt #FFFFFF entity Post.updatedAt #FFFFFF
 
 Post.id -d-* Post.name -d-* Post.title -d-* Post.description -d-* Post
 Post.uploadedAt -l-* Post.updatedAt -l-* Post
 
-entity Data <> #cdccd9 entity Data.id <> entity Data.name <> entity Data.format <> entity Data.size <> Data.uploadedAt <>
+entity Data entity Data.id #FFFFFF entity Data.name #FFFFFF entity Data.format #FFFFFF entity Data.size #FFFFFF Data.uploadedAt #FFFFFF
 
 Data "1.1" -- "1.1" Post
 Data.id -u-* Data.name -u-* Data.format -u-* Data.size -u-* Data.uploadedAt -u-* Data
 
-entity Category <> #cdccd9 entity Category.id <> entity Category.name <> entity Category.description <>
+entity Category entity Category.id #FFFFFF entity Category.name #FFFFFF entity Category.description #FFFFFF
 
 Category "0.1" -- "0.*" Category
 Category "1.1" -- "1.1" Post
