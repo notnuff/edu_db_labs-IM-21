@@ -19,10 +19,10 @@ entity Guest <> entity Guest.id
 Guest "1.1" -- "0.*" Access
 Guest.id -d-* Guest
 
-entity Role <> entity Role.name <> entity Role.id <> entity Role.icon
+entity Role <> entity Role.name <> entity Role.id <> entity Role.permissionRate
 
 Role "1.1" -d-* "0.*" User
-Role.name -d-* Role.id -d-* Role.icon -d-* Role
+Role.name -d-* Role.id -d-* Role.permissionRate -d-* Role
 
 entity Access
 
@@ -43,5 +43,65 @@ entity Category <> entity Category.id <> entity Category.name <> entity Category
 Category "0.1" -- "0.*" Category
 Category "1.1" -- "1.1" Post
 Category.id -u-* Category.name -u-* Category.description -u-* Category
+
+@enduml
+
+## ER-модель
+
+@startuml
+
+entity "User" {
+  id: Int
+  login: Text
+  password: Text
+  mail: Text
+  name: Text
+  role: Text
+}
+
+entity "Access" {
+}
+
+entity "Guest" {
+  id: Int
+}
+
+entity "Role" {
+  name : Text
+  id: Int
+  permissionRate: Int
+}
+
+entity "Post" {
+  id : Int
+  name : Text
+  title : Text
+  description : Text
+  uploadedAt : Date
+  updatedAt : Date
+}
+
+entity "Data" {
+  id : Int
+  name : Text
+  format : Text
+  size : Int
+  uploadedAt : Date
+}
+
+entity "Category" {
+  id : Int
+  name : Text
+  description : Text
+}
+
+User "1.1" -- "0.*" Access
+User "1.1" -- "0.*" Role
+User "1.1" -- "1.1" Post
+Access "0.*" -- "0.*" Post
+Role "1.1" -- "0.*" User
+Guest "1.1" -- "0.*" Access
+Post "0.1" -- "0.*" Category
+Post "1.1" -- "1.1" Data
 
 @enduml
