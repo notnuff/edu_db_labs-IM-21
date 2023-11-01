@@ -8,7 +8,6 @@
 ## Модель бізнес-об'єктів
 
 @startuml
-
 entity User #ffe396
 entity User.password #fcf4dc
 entity User.mail #fcf4dc
@@ -92,17 +91,17 @@ entity Category.description #fcf4dc
 
 Category "0.1"--"0.*" Category
 Category "1.1"-r-"1.1" Post
-Category.name -u- Category
-Category.id -u- Category
-Category.description -r- Category
+Category.name -u-* Category
+Category.id -u-* Category
+Category.description -r-* Category
 
 entity Rating #ffe396
 entity Rating.id #fcf4dc
 entity Rating.value #fcf4dc
 
 Rating "1.1"-r-"1.1" Post
-Rating.value -u- Rating
-Rating.id -d- Rating
+Rating.value -u-* Rating
+Rating.id -d-* Rating
 
 @enduml
 
