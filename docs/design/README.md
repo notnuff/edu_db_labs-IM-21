@@ -109,57 +109,73 @@ Rating.id -d-* Rating
 
 @startuml
 
-entity "User" {
-  id: Int
-  login: Text
-  password: Text
-  mail: Text
-  name: Text
-  role: Text
+entity User {
+  + id : INT
+  + password : TEXT
+  + mail : TEXT
+  + login : TEXT
+  + name : TEXT
 }
 
-entity "Access" {
+entity Role {
+  + id : INT
+  + name : TEXT
+  + permissionRate : INT
 }
 
-entity "Guest" {
-  id: Int
+entity Guest {
+  + id : INT
 }
 
-entity "Role" {
-  name : Text
-  id: Int
-  permissionRate: Int
+entity Organizations  {
+  + id : INT
+  + name : TEXT
+  + members : INT
+  + rating : INT
 }
 
-entity "Post" {
-  id : Int
-  name : Text
-  title : Text
-  description : Text
-  uploadedAt : Date
-  updatedAt : Date
+entity Access {
 }
 
-entity "Data" {
-  id : Int
-  name : Text
-  format : Text
-  size : Int
-  uploadedAt : Date
+entity Post {
+  + id : INT
+  + name : TEXT
+  + title : TEXT
+  + description : TEXT
+  + uploadedAt : DATETIME
+  + updatedAt : DATETIME
 }
 
-entity "Category" {
-  id : Int
-  name : Text
-  description : Text
+entity Data {
+  + id : INT
+  + name : TEXT
+  + format : TEXT
+  + size : INT
+  + uploadedAt : DATETIME
 }
 
-User "1.1" -- "0.*" Access
-User "1.1" -- "0.*" Role
-Access "0.*" -- "0.*" Post
-Role "1.1" -- "0.*" User
-Guest "1.1" -- "0.*" Access
-Post "0.1" -- "0.*" Category
-Post "1.1" -- "1.1" Data
+entity Category {
+  + id : INT
+  + name : TEXT
+  + description : TEXT
+}
+
+entity Rating {
+  + id : INT
+  + value : INT
+}
+
+User "1.1" --> "0.*" Access
+Guest "1.1" --> "0.*" Access
+Organizations "1.1" --> "0.*" Access
+
+Role "0.*" --> "1.1" User
+
+Access --> Post
+Data "0.*" -l-> "1.1" Post
+Rating "1.1" -r-> "1.1" Post
+
+Category "1.1" -u-> "1.1" Post
+Category "0.1" --> "0.*" Category
 
 @enduml
