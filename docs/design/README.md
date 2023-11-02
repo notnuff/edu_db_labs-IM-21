@@ -23,7 +23,7 @@ User.login -u-* User
 User.role "0.*"--"1.1" User
 User.name -r-* User
 User.id -u-* User
-User.organizationsId -l-* User
+User.organizationsId -u-* User
 
 entity Role.name <<TEXT>> #fcf4dc
 entity Role.permissionRate <<NUMBER>> #fcf4dc
@@ -44,7 +44,8 @@ entity Organizations.name <<TEXT>> #fcf4dc
 entity Organizations.members <<TEXT>> #fcf4dc
 entity Organizations.rating <<NUMBER>> #fcf4dc
 
-Organizations.id -d-* Organizations
+Organizations "0.*"-l-"0.*" User
+Organizations.id -l-* Organizations
 Organizations.name -d-* Organizations
 Organizations.members -d-* Organizations
 Organizations.rating -d-* Organizations
