@@ -116,73 +116,74 @@ Rating.id -d-* Rating
 
 @startuml
 
-entity User {
-  + id : INT
-  + password : TEXT
-  + mail : TEXT
-  + login : TEXT
-  + name : TEXT
+entity "User" <<ENTITY>>  {
+  + password <<TEXT>> 
+  + mail <<TEXT>> 
+  + login <<TEXT>> 
+  + name <<TEXT>> 
+  + id <<NUMBER>> 
+  + organizationsId <<NUMBER>> 
 }
 
-entity Role {
-  + id : INT
-  + name : TEXT
-  + permissionRate : INT
+entity "Role" <<ENTITY>>  {
+  + name <<TEXT>> 
+  + permissionRate <<INT>> 
+  + id <<INT>> 
 }
 
-entity Guest {
-  + id : INT
+entity "Guest" <<ENTITY>>  {
+  + id <<INT>> 
 }
 
-entity Organizations  {
-  + id : INT
-  + name : TEXT
-  + members : INT
-  + rating : INT
+
+entity "Organizations" <<ENTITY>>  {
+  + id <<INT>> 
+  + name <<TEXT>> 
+  + members <<TEXT>> 
+  + rating <<NUMBER>> 
 }
 
-entity Access {
+entity "Access" <<ENTITY>>  {
+  + id <<INT>> 
+  + time <<DATETIME>> 
+}
+entity "Post" <<ENTITY>>  {
+  + id <<INT>> 
+  + name <<TEXT>> 
+  + title <<TEXT>> 
+  + description <<TEXT>> 
+  + uploadedAt <<DATETIME>> 
+  + updatedAt <<DATETIME>> 
+}
+entity "Data" <<ENTITY>>  {
+  + id <<INT>> 
+  + name <<TEXT>> 
+  + format <<TEXT>> 
+  + size <<TEXT>> 
+  + uploadedAt <<DATETIME>> 
 }
 
-entity Post {
-  + id : INT
-  + name : TEXT
-  + title : TEXT
-  + description : TEXT
-  + uploadedAt : DATETIME
-  + updatedAt : DATETIME
+
+entity "Category" <<ENTITY>>  {
+  + id <<INT>> 
+  + name <<TEXT>> 
+  + description <<TEXT>> 
 }
 
-entity Data {
-  + id : INT
-  + name : TEXT
-  + format : TEXT
-  + size : INT
-  + uploadedAt : DATETIME
+entity "Rating" <<ENTITY>>  {
+  + id <<INT>> 
+  + value <<NUMBER>> 
 }
 
-entity Category {
-  + id : INT
-  + name : TEXT
-  + description : TEXT
-}
-
-entity Rating {
-  + id : INT
-  + value : INT
-}
-
-User "1.1" --> "0.*" Access
-Guest "1.1" --> "0.*" Access
-Organizations "1.1" --> "0.*" Access
-
-Role "0.*" --> "1.1" User
-
-Access --> Post
-Data "0.*" -l-> "1.1" Post
-Rating "1.1" -r-> "1.1" Post
-
-Category "1.1" -u-> "1.1" Post
-Category "0.1" --> "0.*" Category
+Role "1.1"-l->"1.1" User
+User "0.*"-->"0.*" Organizations
+User "1.1"-d->"0.*" Access
+Organizations "1.1"-d->"0.*" Access
+Guest "1.1"-d->"0.*" Access
+Access "0.*"-d->"1.1" Post
+Category "1.1"-l->"1.1" Post
+Category "0.1"-r->"0.*" Category
+Rating "1.1"-d->"1.1" Post
+Data "0.*"-r->"1.1" Post
 
 @enduml
