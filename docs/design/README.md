@@ -12,51 +12,62 @@ entity User <<ENTITY>> #ffe396
 entity User.password <<TEXT>> #fcf4dc
 entity User.mail <<TEXT>> #fcf4dc
 entity User.login <<TEXT>> #fcf4dc
-entity User.role <<ENTITY>> #ffe396
+entity Role <<ENTITY>> #ffe396
 entity User.name <<TEXT>> #fcf4dc
 entity User.id <<NUMBER>> #fcf4dc
-entity User.organizationsId <<NUMBER>> #fcf4dc
 
 User.password -d-* User
 User.mail -d-* User
-User.login -u-* User
-User.role "0.*"--"1.1" User
-User.name -r-* User
-User.id -u-* User
-User.organizationsId -u-* User
+User.login -r-* User
+Role "0.*"--"1.1" User
+User.name -d-* User
+User.id -d-* User
 
 entity Role.name <<TEXT>> #fcf4dc
 entity Role.id <<NUMBER>> #fcf4dc
 
-Role.name -d-* User.role
-Role.id -d-* User.role
+Role.name -d-* Role
+Role.id -d-* Role
+
+entity Permission_has_Role <<ENTITY>> #ffe396
+
+Permission_has_Role "0.0"-d-"1.1" Role
 
 entity Permission <<ENTITY>> #ffe396
-entity Permission.id <<INT>> #fcf4dc
+entity Permission.id <<NUMBER>> #fcf4dc
 entity Permission.name <<TEXT>> #fcf4dc
 
-Permission -d- User.role
+Permission "1.1"-r-"0.0" Permission_has_Role
 Permission.id -d-* Permission
 Permission.name -d-* Permission
 
-entity Organizations <<ENTITY>> #ffe396
-entity Organizations.id <<NUMBER>> #fcf4dc
-entity Organizations.name <<TEXT>> #fcf4dc
-entity Organizations.members <<TEXT>> #fcf4dc
-entity Organizations.description <<TEXT>> #fcf4dc
+entity Organization <<ENTITY>> #ffe396
+entity Organization.id <<NUMBER>> #fcf4dc
+entity Organization.name <<TEXT>> #fcf4dc
+entity Organization.description <<TEXT>> #fcf4dc
 
-Organizations "0.*"-l-"0.*" User
-Organizations.id -l-* Organizations
-Organizations.name -d-* Organizations
-Organizations.members -d-* Organizations
-Organizations.description -d-* Organizations
+Organization.id -l-* Organization
+Organization.name -d-* Organization
+Organization.description -d-* Organization
+
+entity Organization_list_has_Organizations <<ENTITY>> #ffe396
+
+Organization "1.1"-d-"0.*" Organization_list_has_Organizations
+
+entity Organization_list <<ENTITY>> #ffe396
+entity Organization_list.id <<NUMBER>> #fcf4dc
+entity Organization_list.list_of_organizations <<TEXT>> #fcf4dc
+
+Organization_list_has_Organizations "0.*"-d-"1.1" Organization_list
+Organization_list.id -d-* Organization_list
+Organization_list.list_of_organizations -l-* Organization_list
+Organization_list "1.1"-l-"1.1" User
 
 entity Access <<ENTITY>> #ffe396
 entity Access.id <<NUMBER>> #fcf4dc
 entity Access.time <<DATETIME>> #fcf4dc
 
 User "1.1"-d-"0.*" Access
-Organizations "1.1"-d-"0.*" Access
 Access.id -r-* Access
 Access.time -l-* Access
 
@@ -68,7 +79,7 @@ entity Post.description <<TEXT>> #fcf4dc
 entity Post.uploadedAt <<DATETIME>> #fcf4dc
 entity Post.updatedAt <<DATETIME>> #fcf4dc
 
-Access "0.*"-d-"0.*" Post
+Access "0.*"-d-"1.1" Post
 
 Post.id -u-* Post
 Post.name -u-* Post
@@ -117,35 +128,52 @@ Rating.id -d-* Rating
 @startuml
 
 entity "User" <<ENTITY>>  {
+  + id <<INT>>
+  + login <<TEXT>> 
   + password <<TEXT>> 
   + mail <<TEXT>> 
-  + login <<TEXT>> 
-  + name <<TEXT>> 
-  + id <<NUMBER>> 
-  + organizationsId <<NUMBER>> 
+  + name <<TEXT>>  
+  + roleID <<INT>>
+  + organizations_listID <<NUMBERINT> 
 }
 
 entity "Role" <<ENTITY>>  {
-  + name <<TEXT>> 
-  + permissionRate <<INT>> 
   + id <<INT>> 
+  + name <<TEXT>>
+  + description <<Text 
 }
 
-entity "Guest" <<ENTITY>>  {
-  + id <<INT>> 
+entity "Permission_has_Role" {
+  + permissionId <<INT>>
+  + roleId  <<INT>>
 }
 
+entity "Permission" <<ENTITY>> {
+  + id <<INT>>
+  + name <<TEXT>>
+}
+
+entity Organization_list <<ENTITY>> {
+  + id <<INT>>
+  + list_of_organizations <<TEXT>>
+}
+
+entity "Organization_list_has_Organizations" <<ENTITY>> {
+  + organization_listID <<INT>>
+  + organizationsId <<INT>>
+}
 
 entity "Organizations" <<ENTITY>>  {
   + id <<INT>> 
   + name <<TEXT>> 
-  + members <<TEXT>> 
-  + rating <<NUMBER>> 
+  + description <<TEXT>> 
 }
 
 entity "Access" <<ENTITY>>  {
   + id <<INT>> 
   + time <<DATETIME>> 
+  + UserID <<INT>>
+  + PostID <<INT>>
 }
 entity "Post" <<ENTITY>>  {
   + id <<INT>> 
@@ -154,13 +182,16 @@ entity "Post" <<ENTITY>>  {
   + description <<TEXT>> 
   + uploadedAt <<DATETIME>> 
   + updatedAt <<DATETIME>> 
+  + RatingID <<INT>>
 }
+
 entity "Data" <<ENTITY>>  {
   + id <<INT>> 
   + name <<TEXT>> 
   + format <<TEXT>> 
   + size <<TEXT>> 
   + uploadedAt <<DATETIME>> 
+  + PostID <<INT>>
 }
 
 
@@ -168,6 +199,9 @@ entity "Category" <<ENTITY>>  {
   + id <<INT>> 
   + name <<TEXT>> 
   + description <<TEXT>> 
+  + PostID <<INT>>
+  + CategoryID <<INT>>
+  + Category_PostID <<INT>>
 }
 
 entity "Rating" <<ENTITY>>  {
@@ -176,10 +210,12 @@ entity "Rating" <<ENTITY>>  {
 }
 
 Role "1.1"-l->"1.1" User
-User "0.*"-->"0.*" Organizations
+Permission_has_Role "0.0"-l->"1.1" Role
+Permission "1.1"-d->"0.0" Permission_has_Role
+Organizations "1.1"-r->"0.0" Organization_list_has_Organizations
+Organization_list_has_Organizations "0.0"-d->"1.1" Organization_list
+Organization_list "1.1"-r->"1.1" User
 User "1.1"-d->"0.*" Access
-Organizations "1.1"-d->"0.*" Access
-Guest "1.1"-d->"0.*" Access
 Access "0.*"-d->"1.1" Post
 Category "1.1"-l->"1.1" Post
 Category "0.1"-r->"0.*" Category
