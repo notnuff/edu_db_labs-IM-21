@@ -187,3 +187,7 @@ Rating "1.1"-d->"1.1" Post
 Data "0.*"-r->"1.1" Post
 
 @enduml
+
+## Relation Scheme
+
+![relation_scheme](./photo/ERR_Diagram.png)
