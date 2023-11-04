@@ -26,36 +26,36 @@ User.id -u-* User
 User.organizationsId -u-* User
 
 entity Role.name <<TEXT>> #fcf4dc
-entity Role.permissionRate <<NUMBER>> #fcf4dc
 entity Role.id <<NUMBER>> #fcf4dc
 
 Role.name -d-* User.role
-Role.permissionRate -d-* User.role
 Role.id -d-* User.role
 
-entity Guest <<ENTITY>> #ffe396
-entity Guest.id <<NUMBER>> #fcf4dc
+entity Permission <<ENTITY>> #ffe396
+entity Permission.id <<INT>> #fcf4dc
+entity Permission.name <<TEXT>> #fcf4dc
 
-Guest.id -d-* Guest
+Permission -d- User.role
+Permission.id -d-* Permission
+Permission.name -d-* Permission
 
 entity Organizations <<ENTITY>> #ffe396
 entity Organizations.id <<NUMBER>> #fcf4dc
 entity Organizations.name <<TEXT>> #fcf4dc
 entity Organizations.members <<TEXT>> #fcf4dc
-entity Organizations.rating <<NUMBER>> #fcf4dc
+entity Organizations.description <<TEXT>> #fcf4dc
 
 Organizations "0.*"-l-"0.*" User
 Organizations.id -l-* Organizations
 Organizations.name -d-* Organizations
 Organizations.members -d-* Organizations
-Organizations.rating -d-* Organizations
+Organizations.description -d-* Organizations
 
 entity Access <<ENTITY>> #ffe396
 entity Access.id <<NUMBER>> #fcf4dc
 entity Access.time <<DATETIME>> #fcf4dc
 
 User "1.1"-d-"0.*" Access
-Guest "1.1"-d-"0.*" Access
 Organizations "1.1"-d-"0.*" Access
 Access.id -r-* Access
 Access.time -l-* Access
