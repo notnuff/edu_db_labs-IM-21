@@ -31,7 +31,7 @@ Role.id -d-* Role
 
 entity Permission_has_Role <<ENTITY>> #ffe396
 
-Permission_has_Role "0.0"-d-"1.1" Role
+Permission_has_Role "0.*"-d-"1.1" Role
 
 entity Permission <<ENTITY>> #ffe396
 entity Permission.id <<NUMBER>> #fcf4dc
@@ -108,7 +108,7 @@ entity Category.name <<TEXT>> #fcf4dc
 entity Category.description <<TEXT>> #fcf4dc
 
 Category "0.1"--"0.*" Category
-Category "1.1"-r-"1.1" Post
+Category "0.*"-r-"1.1" Post
 Category.name -u-* Category
 Category.id -u-* Category
 Category.description -r-* Category
@@ -117,7 +117,7 @@ entity Rating <<ENTITY>> #ffe396
 entity Rating.id <<NUMBER>> #fcf4dc
 entity Rating.value <<NUMBER>> #fcf4dc
 
-Rating "1.1"-r-"1.1" Post
+Rating "1.1"-r-"0.*" Post
 Rating.value -u-* Rating
 Rating.id -d-* Rating
 
@@ -134,13 +134,13 @@ entity "User" <<ENTITY>>  {
   + mail <<TEXT>> 
   + name <<TEXT>>  
   + roleID <<INT>>
-  + organizations_listID <<NUMBERINT> 
+  + organizations_listID <<INT>> 
 }
 
 entity "Role" <<ENTITY>>  {
   + id <<INT>> 
   + name <<TEXT>>
-  + description <<Text 
+  + description <<Text>>
 }
 
 entity "Permission_has_Role" {
@@ -183,6 +183,7 @@ entity "Post" <<ENTITY>>  {
   + uploadedAt <<DATETIME>> 
   + updatedAt <<DATETIME>> 
   + RatingID <<INT>>
+  + DataID <<INT>>
 }
 
 entity "Data" <<ENTITY>>  {
@@ -191,7 +192,6 @@ entity "Data" <<ENTITY>>  {
   + format <<TEXT>> 
   + size <<TEXT>> 
   + uploadedAt <<DATETIME>> 
-  + PostID <<INT>>
 }
 
 
@@ -206,7 +206,7 @@ entity "Category" <<ENTITY>>  {
 
 entity "Rating" <<ENTITY>>  {
   + id <<INT>> 
-  + value <<NUMBER>> 
+  + value <<FLOAT>> 
 }
 
 Role "1.1"-l->"0.*" User
