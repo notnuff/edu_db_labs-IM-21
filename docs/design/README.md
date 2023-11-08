@@ -19,7 +19,7 @@ entity User.id <<NUMBER>> #fcf4dc
 User.password -d-* User
 User.mail -d-* User
 User.login -r-* User
-Role "0.*"--"1.1" User
+Role "1.1"--"0.*" User
 User.name -d-* User
 User.id -d-* User
 
@@ -61,7 +61,7 @@ entity Organization_list.list_of_organizations <<TEXT>> #fcf4dc
 Organization_list_has_Organizations "0.*"-d-"1.1" Organization_list
 Organization_list.id -d-* Organization_list
 Organization_list.list_of_organizations -l-* Organization_list
-Organization_list "1.1"-l-"1.1" User
+Organization_list "1.1"-l-"0.*" User
 
 entity Access <<ENTITY>> #ffe396
 entity Access.id <<NUMBER>> #fcf4dc
@@ -209,17 +209,17 @@ entity "Rating" <<ENTITY>>  {
   + value <<NUMBER>> 
 }
 
-Role "1.1"-l->"1.1" User
-Permission_has_Role "0.0"-l->"1.1" Role
-Permission "1.1"-d->"0.0" Permission_has_Role
-Organizations "1.1"-r->"0.0" Organization_list_has_Organizations
-Organization_list_has_Organizations "0.0"-d->"1.1" Organization_list
-Organization_list "1.1"-r->"1.1" User
+Role "1.1"-l->"0.*" User
+Permission_has_Role "0.*"-l->"1.1" Role
+Permission "1.1"-d->"0.*" Permission_has_Role
+Organizations "1.1"-r->"0.*" Organization_list_has_Organizations
+Organization_list_has_Organizations "0.*"-d->"1.1" Organization_list
+Organization_list "1.1"-r->"0.*" User
 User "1.1"-d->"0.*" Access
 Access "0.*"-d->"1.1" Post
-Category "1.1"-l->"1.1" Post
+Category "1.1"-l->"0.*" Post
 Category "0.1"-r->"0.*" Category
-Rating "1.1"-d->"1.1" Post
+Rating "1.1"-d->"0.*" Post
 Data "0.*"-r->"1.1" Post
 
 @enduml
