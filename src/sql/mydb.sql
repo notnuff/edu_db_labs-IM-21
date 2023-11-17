@@ -1,11 +1,3 @@
-# Реалізація інформаційного та програмного забезпечення
-
-В рамках проекту розробляється:
-- ~~SQL-скрипт для створення на початкового наповнення бази даних~~
-- RESTfull сервіс для управління даними
-
-## SQL-Скрипт для створення початкового наповнення бази даних
-```sql
 -- MySQL Workbench Forward Engineering
 
 SET @OLD_UNIQUE_CHECKS=@@UNIQUE_CHECKS, UNIQUE_CHECKS=0;
@@ -357,8 +349,3 @@ Insert into mydb.category (name, description, Post_id, Category_id) Values
 	('Abstract cat name1', 'abc description', 1, 1),
 	('Abstract cat name1', 'abc description', 2, 1),
 	('Abstract cat name2', 'abc description', 3, 2);
-```
-
-
-## RESTfull Сервіс для управління даними
-*У розробці...*

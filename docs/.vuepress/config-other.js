@@ -24,7 +24,7 @@ module.exports = {
     sidebarDepth: 2,
     displayAllHeaders: true, // Default: false themeConfig: {
     nav:  genNavBarList(),
-    lastUpdated: 'Last Updated', // string | boolean
+    lastUpdated: false, // string | boolean
     // Assumes GitHub. Can also be a full GitLab url.
     repo: 'FriendlyUser/vuepress-theme-cool-starter',
     // Customising the header label

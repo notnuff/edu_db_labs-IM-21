@@ -74,7 +74,7 @@ module.exports = {
       { text: 'Початок', link: '/' },
     ],
 
-    lastUpdated: 'Останнє оновлення', // string | boolean
+    lastUpdated: false, // string | boolean
       // Assumes GitHub. Can also be a full GitLab url.
     repo: 'https://github.com/Dmutre/edu_db_labs-IM-21',
     // Customising the header label
