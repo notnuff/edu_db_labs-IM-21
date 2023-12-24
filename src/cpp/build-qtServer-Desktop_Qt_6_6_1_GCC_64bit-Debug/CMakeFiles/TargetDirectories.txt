@@ -1,0 +1,9 @@
+/home/notnuff/database/edu_db_labs-IM-21/src/cpp/build-qtServer-Desktop_Qt_6_6_1_GCC_64bit-Debug/CMakeFiles/qtServer.dir
+/home/notnuff/database/edu_db_labs-IM-21/src/cpp/build-qtServer-Desktop_Qt_6_6_1_GCC_64bit-Debug/CMakeFiles/edit_cache.dir
+/home/notnuff/database/edu_db_labs-IM-21/src/cpp/build-qtServer-Desktop_Qt_6_6_1_GCC_64bit-Debug/CMakeFiles/rebuild_cache.dir
+/home/notnuff/database/edu_db_labs-IM-21/src/cpp/build-qtServer-Desktop_Qt_6_6_1_GCC_64bit-Debug/CMakeFiles/list_install_components.dir
+/home/notnuff/database/edu_db_labs-IM-21/src/cpp/build-qtServer-Desktop_Qt_6_6_1_GCC_64bit-Debug/CMakeFiles/install.dir
+/home/notnuff/database/edu_db_labs-IM-21/src/cpp/build-qtServer-Desktop_Qt_6_6_1_GCC_64bit-Debug/CMakeFiles/install/local.dir
+/home/notnuff/database/edu_db_labs-IM-21/src/cpp/build-qtServer-Desktop_Qt_6_6_1_GCC_64bit-Debug/CMakeFiles/install/strip.dir
+/home/notnuff/database/edu_db_labs-IM-21/src/cpp/build-qtServer-Desktop_Qt_6_6_1_GCC_64bit-Debug/CMakeFiles/qtServer_autogen_timestamp_deps.dir
+/home/notnuff/database/edu_db_labs-IM-21/src/cpp/build-qtServer-Desktop_Qt_6_6_1_GCC_64bit-Debug/CMakeFiles/qtServer_autogen.dir

@@ -1,0 +1,8 @@
+<RCC>
+  <qresource prefix="/">
+    <file alias="assets/certificate.crt">/home/notnuff/database/edu_db_labs-IM-21/src/cpp/qtServer/assets/certificate.crt</file>
+    <file alias="assets/private.key">/home/notnuff/database/edu_db_labs-IM-21/src/cpp/qtServer/assets/private.key</file>
+    <file alias="assets/qt-logo.png">/home/notnuff/database/edu_db_labs-IM-21/src/cpp/qtServer/assets/qt-logo.png</file>
+  </qresource>
+</RCC>
+

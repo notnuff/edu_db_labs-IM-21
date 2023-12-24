@@ -1,0 +1,79 @@
+{
+	"configurations" : 
+	[
+		{
+			"directories" : 
+			[
+				{
+					"build" : ".",
+					"hasInstallRule" : true,
+					"jsonFile" : "directory-.-Debug-e0c7e27c239bc682d2e4.json",
+					"minimumCMakeVersion" : 
+					{
+						"string" : "3.16"
+					},
+					"projectIndex" : 0,
+					"source" : ".",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"name" : "Debug",
+			"projects" : 
+			[
+				{
+					"directoryIndexes" : 
+					[
+						0
+					],
+					"name" : "qtServer",
+					"targetIndexes" : 
+					[
+						0,
+						1,
+						2
+					]
+				}
+			],
+			"targets" : 
+			[
+				{
+					"directoryIndex" : 0,
+					"id" : "qtServer::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-qtServer-Debug-793a84dd8c506c20abbd.json",
+					"name" : "qtServer",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "qtServer_autogen::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-qtServer_autogen-Debug-e347a9082b5c15d93c6e.json",
+					"name" : "qtServer_autogen",
+					"projectIndex" : 0
+				},
+				{
+					"directoryIndex" : 0,
+					"id" : "qtServer_autogen_timestamp_deps::@6890427a1f51a3e7e1df",
+					"jsonFile" : "target-qtServer_autogen_timestamp_deps-Debug-b918bb34a13adb81c613.json",
+					"name" : "qtServer_autogen_timestamp_deps",
+					"projectIndex" : 0
+				}
+			]
+		}
+	],
+	"kind" : "codemodel",
+	"paths" : 
+	{
+		"build" : "/home/notnuff/database/edu_db_labs-IM-21/src/cpp/build-qtServer-Desktop_Qt_6_6_1_GCC_64bit-Debug",
+		"source" : "/home/notnuff/database/edu_db_labs-IM-21/src/cpp/qtServer"
+	},
+	"version" : 
+	{
+		"major" : 2,
+		"minor" : 4
+	}
+}
