@@ -36,3 +36,14 @@
     <img src="./img/delete.png" alt="Delete user">
 </p>
 
+## Користувача з таким ІД не існує
+
+<p align="center">
+    <img src="./img/nouser.png" alt="Delete user">
+</p>
+
+## Неправильні дані для створення користувача
+
+<p align="center">
+    <img src="./img/wrongdata.png" alt="Delete user">
+</p>

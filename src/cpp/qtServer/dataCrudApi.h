@@ -44,7 +44,7 @@ public:
 
         qDebug() << query->lastError() << query->executedQuery();
         qDebug() << db->lastError();
-        return QHttpServerResponse("", QHttpServerResponder::StatusCode::NotFound);
+        return QHttpServerResponse("Цей користувач не знайдений", QHttpServerResponder::StatusCode::NotFound);
 
     }
     QHttpServerResponse getAllItems() const
@@ -101,7 +101,7 @@ public:
 
         qDebug() << query->lastError() << query->executedQuery();
         qDebug() << db->lastError();
-        return QHttpServerResponse(QHttpServerResponder::StatusCode::BadRequest);
+        return QHttpServerResponse("Неправильні дані для створення користувача", QHttpServerResponder::StatusCode::BadRequest);
     }
 
 
