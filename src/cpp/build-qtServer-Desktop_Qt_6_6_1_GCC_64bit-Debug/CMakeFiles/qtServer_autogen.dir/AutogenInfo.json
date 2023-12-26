@@ -473,15 +473,21 @@
 	"HEADERS" : 
 	[
 		[
+			"/home/notnuff/database/edu_db_labs-IM-21/src/cpp/qtServer/connecttodb.h",
+			"MU",
+			"EWIEGA46WW/moc_connecttodb.cpp",
+			null
+		],
+		[
 			"/home/notnuff/database/edu_db_labs-IM-21/src/cpp/qtServer/dataCrudApi.h",
 			"MU",
 			"EWIEGA46WW/moc_dataCrudApi.cpp",
 			null
 		],
 		[
-			"/home/notnuff/database/edu_db_labs-IM-21/src/cpp/qtServer/mytable.h",
+			"/home/notnuff/database/edu_db_labs-IM-21/src/cpp/qtServer/server.h",
 			"MU",
-			"EWIEGA46WW/moc_mytable.cpp",
+			"EWIEGA46WW/moc_server.cpp",
 			null
 		]
 	],
@@ -557,11 +563,6 @@
 	[
 		[
 			"/home/notnuff/database/edu_db_labs-IM-21/src/cpp/qtServer/main.cpp",
-			"MU",
-			null
-		],
-		[
-			"/home/notnuff/database/edu_db_labs-IM-21/src/cpp/qtServer/mytable.cpp",
 			"MU",
 			null
 		]

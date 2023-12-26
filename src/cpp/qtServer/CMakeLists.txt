@@ -14,8 +14,10 @@ find_package(Qt${QT_VERSION_MAJOR} REQUIRED COMPONENTS Core HttpServer Sql Widge
 
 add_executable(qtServer
   main.cpp
-  mytable.h mytable.cpp mytable.ui
+
   dataCrudApi.h
+  connecttodb.h
+  server.h
 
 )
 target_link_libraries(qtServer PRIVATE

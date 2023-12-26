@@ -9,8 +9,11 @@
 #include <QSqlQuery>
 #include <QJsonObject>
 #include <QSqlError>
+#include <QSqlRecord>
 #include <QDateTime>
 #include <QJsonDocument>
+
+
 class DataCrudApi
 {
 public:
@@ -38,6 +41,9 @@ public:
                                                    : res
                                        , QHttpServerResponder::StatusCode::Ok);
         }
+
+        qDebug() << query->lastError() << query->executedQuery();
+        qDebug() << db->lastError();
         return QHttpServerResponse("", QHttpServerResponder::StatusCode::NotFound);
 
     }
@@ -60,6 +66,9 @@ public:
             }
             return QHttpServerResponse(res, QHttpServerResponder::StatusCode::Ok);
         }
+
+        qDebug() << query->lastError() << query->executedQuery();
+        qDebug() << db->lastError();
         return QHttpServerResponse("", QHttpServerResponder::StatusCode::NotFound);
     }
 
@@ -78,9 +87,20 @@ public:
         query->bindValue(":uploadedAt", QDateTime::currentDateTime());
 
         if (query->exec()){
-            return QHttpServerResponse(QHttpServerResponder::StatusCode::Created);
+            query->exec("SELECT * FROM `mydb`.`Data` WHERE id=(SELECT max(id) FROM `mydb`.`Data`);");
+            query->next();
+            QJsonObject res{
+                {QString("id"), query->value(0).toJsonValue()},
+                {QString("size"), query->value(1).toJsonValue()},
+                {QString("format"), query->value(2).toJsonValue()},
+                {QString("name"), query->value(3).toJsonValue()},
+                {QString("updatedAt"), query->value(4).toDateTime().toString("yyyy-MM-dd hh:mm:ss")}
+            };
+            return QHttpServerResponse(res, QHttpServerResponder::StatusCode::Created);
         };
-        qDebug() << query->lastError();
+
+        qDebug() << query->lastError() << query->executedQuery();
+        qDebug() << db->lastError();
         return QHttpServerResponse(QHttpServerResponder::StatusCode::BadRequest);
     }
 
@@ -115,8 +135,20 @@ public:
                        );
 
         if (query->exec()){
-            return QHttpServerResponse(QHttpServerResponder::StatusCode::Ok);
+            query->prepare("SELECT * FROM mydb.Data WHERE id = :id");
+            query->bindValue(":id", itemId);
+            query->exec();
+            query->next();
+            QJsonObject res{
+                {QString("id"), query->value(0).toJsonValue()},
+                {QString("size"), query->value(1).toJsonValue()},
+                {QString("format"), query->value(2).toJsonValue()},
+                {QString("name"), query->value(3).toJsonValue()},
+                {QString("updatedAt"), query->value(4).toDateTime().toString("yyyy-MM-dd hh:mm:ss")}
+            };
+            return QHttpServerResponse(res, QHttpServerResponder::StatusCode::Ok);
         };
+
         qDebug() << query->lastError() << query->executedQuery();
         qDebug() << db->lastError();
         return QHttpServerResponse(QHttpServerResponder::StatusCode::BadRequest);
@@ -124,17 +156,12 @@ public:
 
     QHttpServerResponse deleteItem(qint64 itemId = -1)
     {
-//        query->prepare("SELECT * FROM mydb.Data WHERE id = :id");
-//        query->bindValue(":id", itemId);
-//        if (!query->exec() && !query->next())
-//            return QHttpServerResponse(QHttpServerResponder::StatusCode::BadRequest);
         qDebug() << itemId;
         QString deletePrepare= "";
         if (itemId != -1) deletePrepare.append(QString("WHERE id = %1").arg(itemId));
         query->prepare("DELETE FROM mydb.Data " +
                        deletePrepare);
         if (query->exec())
-            qDebug() << query->lastQuery();
             return QHttpServerResponse(QHttpServerResponder::StatusCode::Ok);
 
         qDebug() << query->lastError() << query->executedQuery();
@@ -147,104 +174,5 @@ private:
     QSqlQuery *query;
 };
 
-//    QHttpServerResponse updateItemFields(qint64 itemId, const QHttpServerRequest &request)
-//    {
-//        const std::optional<QJsonObject> json = byteArrayToJsonObject(request.body());
-//        if (!json)
-//            return QHttpServerResponse(QHttpServerResponder::StatusCode::BadRequest);
-
-//        auto item = data.find(itemId);
-//        if (item == data.end())
-//            return QHttpServerResponse(QHttpServerResponder::StatusCode::NoContent);
-//        item->updateFields(*json);
-
-//        return QHttpServerResponse(item->toJson());
-//    }
-
-//    QHttpServerResponse deleteItem(qint64 itemId)
-//    {
-//        if (!data.remove(itemId))
-//            return QHttpServerResponse(QHttpServerResponder::StatusCode::NoContent);
-//        return QHttpServerResponse(QHttpServerResponder::StatusCode::Ok);
-//    }
-
-
-
-
-
-
-
-
-
-
-
-//class SessionApi
-//{
-//public:
-//    explicit SessionApi(const IdMap<SessionEntry> &sessions,
-//                        std::unique_ptr<FromJsonFactory<SessionEntry>> factory)
-//        : sessions(sessions), factory(std::move(factory))
-//    {
-//    }
-
-//    QHttpServerResponse registerSession(const QHttpServerRequest &request)
-//    {
-//        const auto json = byteArrayToJsonObject(request.body());
-//        if (!json)
-//            return QHttpServerResponse(QHttpServerResponder::StatusCode::BadRequest);
-//        const auto item = factory->fromJson(*json);
-//        if (!item)
-//            return QHttpServerResponse(QHttpServerResponder::StatusCode::BadRequest);
-
-//        const auto session = sessions.insert(item->id, *item);
-//        session->startSession();
-//        return QHttpServerResponse(session->toJson());
-//    }
-
-//    QHttpServerResponse login(const QHttpServerRequest &request)
-//    {
-//        const auto json = byteArrayToJsonObject(request.body());
-
-//        if (!json || !json->contains("email") || !json->contains("password"))
-//            return QHttpServerResponse(QHttpServerResponder::StatusCode::BadRequest);
-
-//        auto maybeSession = std::find_if(
-//            sessions.begin(), sessions.end(),
-//            [email = json->value("email").toString(),
-//             password = json->value("password").toString()](const auto &it) {
-//                return it.password == password && it.email == email;
-//            });
-//        if (maybeSession == sessions.end()) {
-//            return QHttpServerResponse(QHttpServerResponder::StatusCode::NotFound);
-//        }
-//        maybeSession->startSession();
-//        return QHttpServerResponse(maybeSession->toJson());
-//    }
-
-//    QHttpServerResponse logout(const QHttpServerRequest &request)
-//    {
-//        const auto maybeToken = getTokenFromRequest(request);
-//        if (!maybeToken)
-//            return QHttpServerResponse(QHttpServerResponder::StatusCode::BadRequest);
-
-//        auto maybeSession = std::find(sessions.begin(), sessions.end(), *maybeToken);
-//        if (maybeSession != sessions.end())
-//            maybeSession->endSession();
-//        return QHttpServerResponse(QHttpServerResponder::StatusCode::Ok);
-//    }
-
-//    bool authorize(const QHttpServerRequest &request) const
-//    {
-//        const auto maybeToken = getTokenFromRequest(request);
-//        if (maybeToken) {
-//            const auto maybeSession = std::find(sessions.begin(), sessions.end(), *maybeToken);
-//            return maybeSession != sessions.end() && *maybeSession == *maybeToken;
-//        }
-//        return false;
-//    }
-
-//private:
-
-//};
 
 #endif // DATACRUDAPI_H

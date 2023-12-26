@@ -65,14 +65,6 @@ build CMakeFiles/qtServer.dir/main.cpp.o: CXX_COMPILER__qtServer_Debug /home/not
   OBJECT_DIR = CMakeFiles/qtServer.dir
   OBJECT_FILE_DIR = CMakeFiles/qtServer.dir
 
-build CMakeFiles/qtServer.dir/mytable.cpp.o: CXX_COMPILER__qtServer_Debug /home/notnuff/database/edu_db_labs-IM-21/src/cpp/qtServer/mytable.cpp || cmake_object_order_depends_target_qtServer
-  DEFINES = -DQT_CORE_LIB -DQT_GUI_LIB -DQT_HTTPSERVER_LIB -DQT_NETWORK_LIB -DQT_SQL_LIB -DQT_WEBSOCKETS_LIB -DQT_WIDGETS_LIB
-  DEP_FILE = CMakeFiles/qtServer.dir/mytable.cpp.o.d
-  FLAGS = -DQT_QML_DEBUG -g -fPIC -std=gnu++17
-  INCLUDES = -I/home/notnuff/database/edu_db_labs-IM-21/src/cpp/build-qtServer-Desktop_Qt_6_6_1_GCC_64bit-Debug/qtServer_autogen/include -isystem /home/notnuff/Qt/6.6.1/gcc_64/include/QtCore -isystem /home/notnuff/Qt/6.6.1/gcc_64/include -isystem /home/notnuff/Qt/6.6.1/gcc_64/mkspecs/linux-g++ -isystem /home/notnuff/Qt/6.6.1/gcc_64/include/QtHttpServer -isystem /home/notnuff/Qt/6.6.1/gcc_64/include/QtNetwork -isystem /home/notnuff/Qt/6.6.1/gcc_64/include/QtWebSockets -isystem /home/notnuff/Qt/6.6.1/gcc_64/include/QtSql -isystem /home/notnuff/Qt/6.6.1/gcc_64/include/QtWidgets -isystem /home/notnuff/Qt/6.6.1/gcc_64/include/QtGui
-  OBJECT_DIR = CMakeFiles/qtServer.dir
-  OBJECT_FILE_DIR = CMakeFiles/qtServer.dir
-
 
 # =============================================================================
 # Link build statements for EXECUTABLE target qtServer
@@ -81,7 +73,7 @@ build CMakeFiles/qtServer.dir/mytable.cpp.o: CXX_COMPILER__qtServer_Debug /home/
 #############################################
 # Link the executable qtServer
 
-build qtServer: CXX_EXECUTABLE_LINKER__qtServer_Debug CMakeFiles/qtServer.dir/qtServer_autogen/mocs_compilation.cpp.o CMakeFiles/qtServer.dir/main.cpp.o CMakeFiles/qtServer.dir/mytable.cpp.o | /home/notnuff/Qt/6.6.1/gcc_64/lib/libQt6HttpServer.so.6.6.1 /home/notnuff/Qt/6.6.1/gcc_64/lib/libQt6Sql.so.6.6.1 /home/notnuff/Qt/6.6.1/gcc_64/lib/libQt6Widgets.so.6.6.1 /home/notnuff/Qt/6.6.1/gcc_64/lib/libQt6WebSockets.so.6.6.1 /home/notnuff/Qt/6.6.1/gcc_64/lib/libQt6Network.so.6.6.1 /home/notnuff/Qt/6.6.1/gcc_64/lib/libQt6Gui.so.6.6.1 /home/notnuff/Qt/6.6.1/gcc_64/lib/libQt6Core.so.6.6.1 /usr/lib/x86_64-linux-gnu/libGLX.so /usr/lib/x86_64-linux-gnu/libOpenGL.so || qtServer_autogen qtServer_autogen_timestamp_deps
+build qtServer: CXX_EXECUTABLE_LINKER__qtServer_Debug CMakeFiles/qtServer.dir/qtServer_autogen/mocs_compilation.cpp.o CMakeFiles/qtServer.dir/main.cpp.o | /home/notnuff/Qt/6.6.1/gcc_64/lib/libQt6HttpServer.so.6.6.1 /home/notnuff/Qt/6.6.1/gcc_64/lib/libQt6Sql.so.6.6.1 /home/notnuff/Qt/6.6.1/gcc_64/lib/libQt6Widgets.so.6.6.1 /home/notnuff/Qt/6.6.1/gcc_64/lib/libQt6WebSockets.so.6.6.1 /home/notnuff/Qt/6.6.1/gcc_64/lib/libQt6Network.so.6.6.1 /home/notnuff/Qt/6.6.1/gcc_64/lib/libQt6Gui.so.6.6.1 /home/notnuff/Qt/6.6.1/gcc_64/lib/libQt6Core.so.6.6.1 /usr/lib/x86_64-linux-gnu/libGLX.so /usr/lib/x86_64-linux-gnu/libOpenGL.so || qtServer_autogen qtServer_autogen_timestamp_deps
   FLAGS = -DQT_QML_DEBUG -g
   LINK_LIBRARIES = -Wl,-rpath,/home/notnuff/Qt/6.6.1/gcc_64/lib:  /home/notnuff/Qt/6.6.1/gcc_64/lib/libQt6HttpServer.so.6.6.1  /home/notnuff/Qt/6.6.1/gcc_64/lib/libQt6Sql.so.6.6.1  /home/notnuff/Qt/6.6.1/gcc_64/lib/libQt6Widgets.so.6.6.1  /home/notnuff/Qt/6.6.1/gcc_64/lib/libQt6WebSockets.so.6.6.1  /home/notnuff/Qt/6.6.1/gcc_64/lib/libQt6Network.so.6.6.1  /home/notnuff/Qt/6.6.1/gcc_64/lib/libQt6Gui.so.6.6.1  /home/notnuff/Qt/6.6.1/gcc_64/lib/libQt6Core.so.6.6.1  /usr/lib/x86_64-linux-gnu/libGLX.so  /usr/lib/x86_64-linux-gnu/libOpenGL.so
   OBJECT_DIR = CMakeFiles/qtServer.dir
@@ -166,7 +158,7 @@ build qtServer_autogen_timestamp_deps: phony CMakeFiles/qtServer_autogen_timesta
 #############################################
 # Utility command for qtServer_autogen
 
-build qtServer_autogen: phony CMakeFiles/qtServer_autogen qtServer_autogen/include/ui_mytable.h qtServer_autogen/timestamp qtServer_autogen/mocs_compilation.cpp qtServer_autogen_timestamp_deps
+build qtServer_autogen: phony CMakeFiles/qtServer_autogen qtServer_autogen/timestamp qtServer_autogen/mocs_compilation.cpp qtServer_autogen_timestamp_deps
 
 
 #############################################
@@ -188,7 +180,7 @@ build CMakeFiles/qtServer_autogen_timestamp_deps | ${cmake_ninja_workdir}CMakeFi
 #############################################
 # Phony custom command for CMakeFiles/qtServer_autogen
 
-build CMakeFiles/qtServer_autogen qtServer_autogen/include/ui_mytable.h | ${cmake_ninja_workdir}CMakeFiles/qtServer_autogen ${cmake_ninja_workdir}qtServer_autogen/include/ui_mytable.h: phony qtServer_autogen/timestamp || qtServer_autogen_timestamp_deps
+build CMakeFiles/qtServer_autogen | ${cmake_ninja_workdir}CMakeFiles/qtServer_autogen: phony qtServer_autogen/timestamp || qtServer_autogen_timestamp_deps
 
 # =============================================================================
 # Target aliases.
