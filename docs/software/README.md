@@ -1,7 +1,7 @@
 # Реалізація інформаційного та програмного забезпечення
 
 В рамках проекту розробляється:
-- ~~SQL-скрипт для створення на початкового наповнення бази даних~~
+- ~~SQL-скрипт для створення початкового наповнення бази даних~~
 - RESTfull сервіс для управління даними
 
 ## SQL-Скрипт для створення початкового наповнення бази даних
@@ -96,7 +96,7 @@ ENGINE = InnoDB;
 DROP TABLE IF EXISTS `mydb`.`Data` ;
 
 CREATE TABLE IF NOT EXISTS `mydb`.`Data` (
-  `id` INT NOT NULL AUTO_INCREMENT,
+  `id` INT NOT NULL AUTO_INCREMENT ,
   `size` VARCHAR(45) NOT NULL,
   `format` VARCHAR(45) NOT NULL,
   `name` VARCHAR(45) NOT NULL,
@@ -324,6 +324,13 @@ Insert Into mydb.data (size, format, name, uploadedAt) Values
     ('3.1mb', 'png', 'png2', '2023-11-16'),
     ('1.7mb', 'png', 'png3', '2023-11-16');
 
+-- Inserting data info before post creating --
+INSERT INTO `mydb`.`Data` (`size`, `format`, `name`, `uploadedAt`) VALUES 
+	('2.5mb', 'png', 'png1', '2023-11-16'),
+    ('3.1mb', 'png', 'png2', '2023-11-16'),
+    ('1.7mb', 'png', 'png3', '2023-11-16');
+    
+    
 -- Inserting Def. rating for each post --
 Insert into mydb.rating (value) Values
 	(0.0),
@@ -360,5 +367,358 @@ Insert into mydb.category (name, description, Post_id, Category_id) Values
 ```
 
 
-## RESTfull Сервіс для управління даними
-*У розробці...*
+## RESTfull сервіс для управління даними
+
+###  Старт програми (main)
+
+```c++
+#include <QCoreApplication>
+#include <QCommandLineParser>
+#include "server.h"
+
+int main(int argc, char *argv[])
+{
+    QCoreApplication app(argc, argv);
+    QCommandLineParser parser;
+
+    parser.addOptions({
+                       { "port", QCoreApplication::translate("main", "The port the server listens on."),
+                        "port" },
+                       });
+    parser.addHelpOption();
+    parser.process(app);
+
+    QString host = "127.0.0.1";
+    quint16 portArg = 1337;
+    if (!parser.value("port").isEmpty())
+        portArg = parser.value("port").toUShort();
+
+    BasicHttpServer server{host, portArg};
+    server.setupRoutes();
+
+    return app.exec();
+}
+
+```
+
+### Модель сервера і роутингу
+
+```.h
+#ifndef SERVER_H
+#define SERVER_H
+
+#include <QHttpServer>
+#include <QHttpServerResponse>
+#include <QCoreApplication>
+
+#include "connecttodb.h"
+#include "dataCrudApi.h"
+
+class BasicHttpServer{
+private:
+    QHttpServer httpServer;
+    QSqlDatabase *db;
+    QSqlQuery *query;
+    DataCrudApi *api;
+    int port;
+public:
+    BasicHttpServer(QString host = "127.0.0.1", int port = 1337){
+        ConnectionToDB connect;
+        if (connect.conectToDb()) db = connect.getDB();
+        query = new QSqlQuery(*db);
+        api = new DataCrudApi(db);
+        qInfo().noquote()
+            << QCoreApplication::translate("QHttpServerExample",
+                                           "Running on %1:%2/"
+                                           "(Press CTRL+C to quit)").arg(host).arg(port);
+        port = httpServer.listen(QHostAddress(host), port);
+
+        if (!port) {
+            qWarning() << QCoreApplication::translate("QHttpServerExample",
+                                                      "Server failed to listen on a port.");
+        }
+    }
+
+    void setupRoutes(){
+        DataCrudApi thisApi = *api;
+        httpServer.route(
+            QString("/data"), QHttpServerRequest::Method::Get,
+            [this](const QHttpServerRequest &request) {
+                return api->getAllItems();
+            });
+
+        httpServer.route(
+            QString("/data/<arg>"), QHttpServerRequest::Method::Get,
+            [this](qint64 itemId) {
+                return api->getItem(itemId);
+            });
+
+        httpServer.route(
+            QString("/data"), QHttpServerRequest::Method::Post,
+            [this](const QHttpServerRequest &request) {
+                return api->createItem(request);
+            });
+
+        httpServer.route(
+            QString("/data/<arg>"), QHttpServerRequest::Method::Patch,
+            [this](qint64 itemId, const QHttpServerRequest &request) {
+                return api->updateItem(itemId, request);
+            });
+
+        httpServer.route(
+            QString("/data"), QHttpServerRequest::Method::Delete,
+            [this]() {
+                return api->deleteItem();
+            });
+
+        httpServer.route(
+            QString("/data/<arg>"), QHttpServerRequest::Method::Delete,
+            [this](qint64 itemId) {
+                return api->deleteItem(itemId);
+            });
+
+        httpServer.afterRequest(
+            [](QHttpServerResponse &&resp) {
+                resp.setHeader("Server", "Qt REST full api");
+                return std::move(resp);
+            });
+    }
+};
+
+#endif // SERVER_H
+
+```
+
+### Модуль для підключення до бази даних
+
+```.h
+#ifndef CONNECTTODB_H
+#define CONNECTTODB_H
+
+#include <QString>
+#include <QSqlDatabase>
+#include <QSqlError>
+#include <QDebug>
+
+class ConnectionToDB{
+
+private:
+    QString dbName;
+    QString host;
+    QString userName;
+    QString password;
+    QSqlDatabase *db = new QSqlDatabase();
+    int port;
+public:
+    bool conectToDb(
+            QString host = "localhost",
+            QString dbName = "mydb",
+            QString userName = "root",
+            QString password = "6=Oo6s9<GDfqa5QTg£^T-yC,kbFs8",
+            int port = 3306)
+    {
+        *db = QSqlDatabase::addDatabase("QMYSQL");
+        db->setHostName(host);
+        db->setDatabaseName(dbName);
+        db->setUserName(userName);
+        db->setPassword(password);
+        db->setPort(port);
+        bool ok = db->open();
+        if (!ok){
+            qDebug() << db->lastError();
+            return false;
+        }
+        return true;
+    }
+    QSqlDatabase *getDB (){
+        return db;
+    }
+};
+
+#endif // CONNECTTODB_H
+
+```
+
+### Модуль CRUD API
+
+```.h
+#ifndef DATACRUDAPI_H
+#define DATACRUDAPI_H
+
+#include <QtGlobal>
+#include <QtHttpServer/QHttpServer>
+#include <QtConcurrent/qtconcurrentrun.h>
+#include <QSqlDatabase>
+#include <optional>
+#include <QSqlQuery>
+#include <QJsonObject>
+#include <QSqlError>
+#include <QSqlRecord>
+#include <QDateTime>
+#include <QJsonDocument>
+
+
+class DataCrudApi
+{
+public:
+    DataCrudApi(QSqlDatabase *db) : db(db)
+    {
+        query = new QSqlQuery(*db);
+    }
+
+    QHttpServerResponse getItem(qint64 itemId) const
+    {
+        query->prepare("SELECT * FROM mydb.Data WHERE id = :id");
+        query->bindValue(":id", itemId);
+        if (query->exec() && query->next()) {
+            QJsonObject res;
+            QJsonObject row{
+                {QString("id"), query->value(0).toJsonValue()},
+                {QString("size"), query->value(1).toJsonValue()},
+                {QString("format"), query->value(2).toJsonValue()},
+                {QString("name"), query->value(3).toJsonValue()},
+                {QString("updatedAt"), query->value(4).toDateTime().toString("yyyy-MM-dd hh:mm:ss")}
+            };
+            res.insert(QString("%1").arg(query->value(0).toInt()), row);
+            return QHttpServerResponse(res.empty() ?
+                                           QVariant("No data").toJsonObject()
+                                                   : res
+                                       , QHttpServerResponder::StatusCode::Ok);
+        }
+
+        qDebug() << query->lastError() << query->executedQuery();
+        qDebug() << db->lastError();
+        return QHttpServerResponse("", QHttpServerResponder::StatusCode::NotFound);
+
+    }
+    QHttpServerResponse getAllItems() const
+    {
+        query->prepare("SELECT * FROM mydb.Data");
+
+        if (query->exec()) {
+            if (!query->size()) return QHttpServerResponse("No data", QHttpServerResponder::StatusCode::Ok);
+            QJsonObject res;
+            while (query->next()){
+                QJsonObject row{
+                    {QString("id"), query->value(0).toJsonValue()},
+                    {QString("size"), query->value(1).toJsonValue()},
+                    {QString("format"), query->value(2).toJsonValue()},
+                    {QString("name"), query->value(3).toJsonValue()},
+                    {QString("updatedAt"), query->value(4).toString()}
+                };
+                res.insert(QString("%1").arg(query->value(0).toInt()), row);
+            }
+            return QHttpServerResponse(res, QHttpServerResponder::StatusCode::Ok);
+        }
+
+        qDebug() << query->lastError() << query->executedQuery();
+        qDebug() << db->lastError();
+        return QHttpServerResponse("", QHttpServerResponder::StatusCode::NotFound);
+    }
+
+    QHttpServerResponse createItem(const QHttpServerRequest &request)
+    {
+        query->prepare("INSERT INTO mydb.Data (size, format, name, uploadedAt) VALUES "
+                            "(:size, :format, :name, :uploadedAt)"
+                       );
+
+        QJsonDocument parseDoc= QJsonDocument::fromJson(QByteArray(request.body()));
+        QJsonObject parseObject = parseDoc.object();
+
+        query->bindValue(":size", parseObject["size"].toVariant());
+        query->bindValue(":format", parseObject["format"].toVariant());
+        query->bindValue(":name", parseObject["name"].toVariant());
+        query->bindValue(":uploadedAt", QDateTime::currentDateTime());
+
+        if (query->exec()){
+            query->exec("SELECT * FROM `mydb`.`Data` WHERE id=(SELECT max(id) FROM `mydb`.`Data`);");
+            query->next();
+            QJsonObject res{
+                {QString("id"), query->value(0).toJsonValue()},
+                {QString("size"), query->value(1).toJsonValue()},
+                {QString("format"), query->value(2).toJsonValue()},
+                {QString("name"), query->value(3).toJsonValue()},
+                {QString("updatedAt"), query->value(4).toDateTime().toString("yyyy-MM-dd hh:mm:ss")}
+            };
+            return QHttpServerResponse(res, QHttpServerResponder::StatusCode::Created);
+        };
+
+        qDebug() << query->lastError() << query->executedQuery();
+        qDebug() << db->lastError();
+        return QHttpServerResponse(QHttpServerResponder::StatusCode::BadRequest);
+    }
+
+
+    QHttpServerResponse updateItem(qint64 itemId, const QHttpServerRequest &request)
+    {
+        query->prepare("SELECT * FROM mydb.Data WHERE id = :id");
+        query->bindValue(":id", itemId);
+        if (!query->exec() && !query->next())
+            return QHttpServerResponse(QHttpServerResponder::StatusCode::BadRequest);
+
+
+
+        QJsonDocument parseDoc= QJsonDocument::fromJson(QByteArray(request.body()));
+        QJsonObject parseObject = parseDoc.object();
+        QString prepareSet;
+
+        for (QJsonObject::iterator it = parseObject.begin(); it != parseObject.end(); ++it) {
+            QString key = it.key();
+            QJsonValue value = it.value();
+            prepareSet.append(QString("`%1` = '%2', ").arg(key, value.toString()));
+        }
+
+        query->prepare("UPDATE mydb.Data "
+                       "SET " +
+                       prepareSet +
+                       "uploadedAt = '" +
+                       QDateTime::currentDateTime().toString("yyyy-MM-dd hh:mm:ss") +
+                       "' WHERE (`id` = '" +
+                       QString::number(itemId) +
+                       "');"
+                       );
+
+        if (query->exec()){
+            query->prepare("SELECT * FROM mydb.Data WHERE id = :id");
+            query->bindValue(":id", itemId);
+            query->exec();
+            query->next();
+            QJsonObject res{
+                {QString("id"), query->value(0).toJsonValue()},
+                {QString("size"), query->value(1).toJsonValue()},
+                {QString("format"), query->value(2).toJsonValue()},
+                {QString("name"), query->value(3).toJsonValue()},
+                {QString("updatedAt"), query->value(4).toDateTime().toString("yyyy-MM-dd hh:mm:ss")}
+            };
+            return QHttpServerResponse(res, QHttpServerResponder::StatusCode::Ok);
+        };
+
+        qDebug() << query->lastError() << query->executedQuery();
+        qDebug() << db->lastError();
+        return QHttpServerResponse(QHttpServerResponder::StatusCode::BadRequest);
+    }
+
+    QHttpServerResponse deleteItem(qint64 itemId = -1)
+    {
+        qDebug() << itemId;
+        QString deletePrepare= "";
+        if (itemId != -1) deletePrepare.append(QString("WHERE id = %1").arg(itemId));
+        query->prepare("DELETE FROM mydb.Data " +
+                       deletePrepare);
+        if (query->exec())
+            return QHttpServerResponse(QHttpServerResponder::StatusCode::Ok);
+
+        qDebug() << query->lastError() << query->executedQuery();
+        qDebug() << db->lastError();
+        return QHttpServerResponse(QHttpServerResponder::StatusCode::BadRequest);
+    }
+
+private:
+    QSqlDatabase *db;
+    QSqlQuery *query;
+};
+
+
+#endif // DATACRUDAPI_H
+
+```
